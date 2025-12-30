@@ -1,0 +1,109 @@
+{% load static %}
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <span class="logo-text">Muhammad Ahmed Naeem</span>
+                    </div>
+                    <p class="footer-description">
+                        Building tomorrow's intelligence through cutting-edge AI and machine learning solutions.
+                    </p>
+                    <div class="social-links">
+                        {% for social in social_links %}
+                        <a href="{{ social.url }}" target="_blank" class="social-link" rel="noopener">
+                            <i class="{{ social.icon }}"></i>
+                            <span class="social-glow"></span>
+                        </a>
+                        {% empty %}
+                        <!-- Default social links if none exist -->
+                        <a href="https://github.com" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                            <span class="social-glow"></span>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" class="social-link">
+                            <i class="fab fa-linkedin"></i>
+                            <span class="social-glow"></span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4 class="footer-title">Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'project_list' %}">AI Projects</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4 class="footer-title">AI Expertise</h4>
+                <ul class="footer-links">
+                    <li>Machine Learning</li>
+                    <li>Deep Learning</li>
+                    <li>Computer Vision</li>
+                    <li>Natural Language Processing</li>
+                    <li>Neural Networks</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4 class="footer-title">Technologies</h4>
+                <ul class="footer-links">
+                    <li>Python & Django</li>
+                    <li>TensorFlow & PyTorch</li>
+                    <li>Computer Vision</li>
+                    
+
+
+                    <li>Data Science</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4 class="footer-title">Get In Touch</h4>
+                <p class="footer-contact">
+                    Ready to build intelligent solutions together?
+                </p>
+                <a href="{% url 'contact' %}" class="footer-cta-btn">
+                    <i class="fas fa-rocket"></i>
+                    <span>Start Project</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p class="copyright">
+                    &copy; {{ current_year|default:2025 }} {{ site_profile.full_name|default:'AI Developer' }}. 
+                    All rights reserved.
+                </p>
+                <div class="footer-tech-badge">
+                    <span>Powered by</span>
+                    <div class="tech-icons">
+                        <i class="fab fa-python" title="Python"></i>
+                        <i class="fas fa-brain" title="AI/ML"></i>
+                        <i class="fab fa-django" title="Django"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Footer Effects -->
+        <div class="footer-ai-effects">
+            <div class="neural-connections">
+                <div class="connection-line connection-1"></div>
+                <div class="connection-line connection-2"></div>
+                <div class="connection-line connection-3"></div>
+            </div>
+        </div>
+    </div>
+</footer>

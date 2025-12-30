@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Me - AI Developer & Machine Learning Engineer{% endblock %}
+
+{% block body_class %}about-page{% endblock %}
+
+{% block content %}
+<section class="about-hero section">
+    <div class="container">
+        <div class="about-hero-content scroll-reveal">
+            <div class="about-text">
+                <div class="section-badge">
+                    <i class="fas fa-user-astronaut"></i>
+                    <span>About Me</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="gradient-text">AI Developer</span>
+                    <span class="ai-text glitch-text" data-text="& Innovator">& Innovator</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Passionate about building intelligent solutions that shape the future through cutting-edge artificial intelligence and machine learning technologies.
+                </p>
+                
+                <div class="about-stats">
+                    <div class="stat-item scroll-reveal">
+                        <span class="stat-number" data-target="5">1+</span>
+                        <span class="stat-label">Years Experience</span>
+                    </div>
+                    <div class="stat-item scroll-reveal">
+                        <span class="stat-number" data-target="50">50+</span>
+                        <span class="stat-label">AI Projects</span>
+                    </div>
+                    <div class="stat-item scroll-reveal">
+                        <span class="stat-number" data-target="100">10+</span>
+                        <span class="stat-label">Happy Clients</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-visual scroll-reveal">
+                {% if site_profile.avatar %}
+                <div class="profile-image-container">
+                    <img src="{{ site_profile.avatar.url }}" alt="{{ site_profile.full_name }}" class="profile-image">
+                    <div class="image-glow"></div>
+                </div>
+                {% else %}
+                <div class="ai-avatar-placeholder">
+                    <div class="avatar-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                    <div class="avatar-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section class="skills-matrix-section section">
+    <div class="container">
+        <div class="section-header scroll-reveal">
+            <div class="section-badge">
+                <i class="fas fa-brain"></i>
+                <span>Technical Skills</span>
+            </div>
+            <h2 class="section-title">AI & Development Expertise</h2>
+            <p class="section-subtitle">Advanced technologies powering intelligent solutions</p>
+        </div>
+        
+        <div class="skills-categories">
+            {% for category, skills in skills_by_category.items %}
+            <div class="skill-category-card scroll-reveal">
+                <div class="category-header">
+                    <div class="category-icon">
+                        {% if category == 'ai_ml' %}
+                            <i class="fas fa-brain"></i>
+                        {% elif category == 'backend' %}
+                            <i class="fas fa-server"></i>
+                        {% elif category == 'frontend' %}
+                            <i class="fas fa-code"></i>
+                        {% elif category == 'tools' %}
+                            <i class="fas fa-tools"></i>
+                        {% elif category == 'cloud' %}
+                            <i class="fas fa-cloud"></i>
+                        {% else %}
+                            <i class="fas fa-microchip"></i>
+                        {% endif %}
+                    </div>
+                    <h3 class="category-title">
+                        {% if category == 'ai_ml' %}
+                            AI/ML
+                        {% else %}
+                        {{ category|cut:"_"|title }}
+
+                        {% endif %}
+                    </h3>
+                </div>
+                
+                <div class="skills-list">
+                    {% for skill in skills %}
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            {% if skill.icon %}
+                                <i class="{{ skill.icon }}"></i>
+                            {% else %}
+                                <i class="fas fa-code"></i>
+                            {% endif %}
+                            <span class="skill-name">{{ skill.name }}</span>
+                            <span class="skill-percentage">{{ skill.percentage }}%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-percentage="{{ skill.percentage }}">
+                                <div class="progress-shine"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <!-- Default skills if none exist -->
+            <div class="skill-category-card scroll-reveal">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="category-title">AI/ML</h3>
+                </div>
+                <div class="skills-list">
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <i class="fab fa-python"></i>
+                            <span class="skill-name">Python</span>
+                            <span class="skill-percentage">95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-percentage="95"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <i class="fas fa-brain"></i>
+                            <span class="skill-name">TensorFlow</span>
+                            <span class="skill-percentage">90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-percentage="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <i class="fas fa-robot"></i>
+                            <span class="skill-name">PyTorch</span>
+                            <span class="skill-percentage">85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-percentage="85"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Experience Section with Enhanced Timeline -->
+<section class="experience-section section">
+    <div class="container">
+        <div class="section-header scroll-reveal">
+            <div class="section-badge">
+                <i class="fas fa-briefcase"></i>
+                <span>Professional Journey</span>
+            </div>
+            <h2 class="section-title">Experience & Growth</h2>
+            <p class="section-subtitle">Building intelligent solutions across industries</p>
+        </div>
+        
+        <div class="experience-timeline timeline-loading">
+            <!-- Senior AI Developer -->
+            <div class="timeline-item" data-level="senior">
+                <div class="timeline-marker">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="experience-progress"></div>
+                    <h4>AI Developer</h4>
+                    <span class="timeline-period">2023 - Present</span>
+                    <p>Leading AI development projects, implementing machine learning models, and building intelligent web applications using Django and modern ML frameworks. Spearheading innovation in neural networks and deep learning architectures.</p>
+                    
+                    <div class="achievement-highlight">
+                        <p>Led development of 15+ AI projects with 95% client satisfaction rate</p>
+                    </div>
+                    
+                    <div class="experience-skills">
+                        <span class="experience-skill-tag">Python</span>
+                        <span class="experience-skill-tag">TensorFlow</span>
+                        <span class="experience-skill-tag">PyTorch</span>
+                        <span class="experience-skill-tag">Django</span>
+                        <span class="experience-skill-tag">Flask</span>
+                        <span class="experience-skill-tag">Computer Vision</span>
+
+                        <span class="experience-skill-tag">Git</span>
+
+                        <span class="experience-skill-tag">Data Science</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Machine Learning Engineer -->
+            <div class="timeline-item" data-level="mid">
+                <div class="timeline-marker">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="experience-progress"></div>
+                    <h4>Machine Learning Engineer</h4>
+                    <span class="timeline-period">2023 - Present</span>
+                    <p>Developed and deployed ML models for computer vision and NLP applications. Specialized in deep learning architectures and neural network optimization. Built scalable AI solutions for production environments.</p>
+                    
+                    <div class="achievement-highlight">
+                        <p>Deployed 25+ ML models achieving 90%+ accuracy in production</p>
+                    </div>
+                    
+                    <div class="experience-skills">
+                        <span class="experience-skill-tag">Computer Vision</span>
+                        <span class="experience-skill-tag">NLP</span>
+                        <span class="experience-skill-tag">Deep Learning</span>
+                        <span class="experience-skill-tag">Scikit-learn</span>
+                        <span class="experience-skill-tag">OpenCV</span>
+                        <span class="experience-skill-tag">Python</span>
+                        <span class="experience-skill-tag">Git</span>
+
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Full Stack Developer -->
+            <div class="timeline-item" data-level="junior">
+                <div class="timeline-marker">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="experience-progress"></div>
+                    <h4>Backend Developer</h4>
+                    <span class="timeline-period">2023 - Present</span>
+                    <p>Built robust web applications using Django, and modern development practices. Focused on scalable architecture and user experience. Developed foundation skills in software engineering and system design.</p>
+                    
+                    <div class="achievement-highlight">
+                        <p>Built 10+ backend applications serving  users</p>
+                    </div>
+                    
+                    <div class="experience-skills">
+                        <span class="experience-skill-tag">C++</span>
+                        <span class="experience-skill-tag">Database</span>
+                        <span class="experience-skill-tag">Django</span>
+                        <span class="experience-skill-tag">Python</span>
+                        <span class="experience-skill-tag">Computer Vision</span>
+                        <span class="experience-skill-tag">Git</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Background Elements -->
+        <div class="floating-elements">
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Additional page-specific enhancements
+document.addEventListener('DOMContentLoaded', function() {
+    // Enhanced skill interactions
+    document.querySelectorAll('.experience-skill-tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+            // Create floating effect
+            const rect = this.getBoundingClientRect();
+            const floatingTag = this.cloneNode(true);
+            floatingTag.style.position = 'fixed';
+            floatingTag.style.left = rect.left + 'px';
+            floatingTag.style.top = rect.top + 'px';
+            floatingTag.style.pointerEvents = 'none';
+            floatingTag.style.zIndex = '9999';
+            floatingTag.style.animation = 'skill-float-up 2s ease-out forwards';
+            
+            document.body.appendChild(floatingTag);
+            
+            setTimeout(() => {
+                if (floatingTag.parentNode) {
+                    floatingTag.remove();
+                }
+            }, 2000);
+        });
+    });
+    
+    // Add skill float animation
+    const skillStyle = document.createElement('style');
+    skillStyle.textContent = `
+        @keyframes skill-float-up {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+    `;
+    document.head.appendChild(skillStyle);
+});
+</script>
+{% endblock %}

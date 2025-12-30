@@ -1,0 +1,87 @@
+{% load static %}
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">
+            <a href="{% url 'home' %}" class="logo-link">
+                <div class="logo-icon logo-3d-character">
+                    <!-- 3D Character Avatar -->
+                    <div class="character-container">
+                        <div class="character-head">
+                            <div class="character-face">
+                                <div class="character-eyes">
+                                    <div class="eye eye-left">
+                                        <div class="pupil"></div>
+                                        <div class="eye-shine"></div>
+                                    </div>
+                                    <div class="eye eye-right">
+                                        <div class="pupil"></div>
+                                        <div class="eye-shine"></div>
+                                    </div>
+                                </div>
+                                <div class="character-nose"></div>
+                                <div class="character-mouth">
+                                    <div class="mouth-curve"></div>
+                                </div>
+                            </div>
+                            <div class="character-hair">
+                                <div class="hair-strand hair-1"></div>
+                                <div class="hair-strand hair-2"></div>
+                                <div class="hair-strand hair-3"></div>
+                            </div>
+                        </div>
+                        <div class="character-body">
+                            <div class="character-shirt">
+                                <div class="shirt-collar"></div>
+                                <div class="shirt-button"></div>
+                            </div>
+                        </div>
+                        <!-- Tech Elements -->
+                        <div class="tech-elements">
+                            <div class="code-particle particle-1">&lt;/&gt;</div>
+                            <div class="code-particle particle-2">AI</div>
+                            <div class="code-particle particle-3">{ }</div>
+                        </div>
+                    </div>
+                </div>
+                <span class="logo-text notranslate" translate="no" lang="en">Muhammad Ahmed Naeem</span>
+            </a>
+        </div>
+        
+        <ul class="nav-menu" id="nav-menu">
+            <li class="nav-item">
+                <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <i class="fas fa-home"></i>
+                    <span translate="no">Home</span>
+                    <div class="nav-glow"></div>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'about' %}" class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                    <i class="fas fa-user-astronaut"></i>
+                    <span translate="no">About</span>
+                    <div class="nav-glow"></div>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'project_list' %}" class="nav-link {% if 'project' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-robot"></i>
+                    <span translate="no">AI Projects</span>
+                    <div class="nav-glow"></div>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'contact' %}" class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span translate="no">Contact</span>
+                    <div class="nav-glow"></div>
+                </a>
+            </li>
+        </ul>
+        
+        <!-- AI Assistant Button -->
+        
+        
+        <!-- Hamburger Menu -->
+        
+    </div>
+</nav>

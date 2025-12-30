@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AI Projects - Innovative Machine Learning Solutions{% endblock %}
+
+{% block body_class %}projects-page{% endblock %}
+
+{% block content %}
+<section class="projects-hero section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">
+                <i class="fas fa-robot"></i>
+                <span>AI Projects</span>
+            </div>
+            <h1 class="section-title">
+                <span class="gradient-text">Intelligent</span>
+                <span class="ai-text">Solutions</span>
+            </h1>
+            <p class="section-subtitle">
+                Exploring the frontiers of artificial intelligence through cutting-edge projects and innovative applications
+            </p>
+        </div>
+        
+        <!-- Project Stats -->
+        <div class="project-stats">
+            <div class="stat-item">
+                <span class="stat-number">{{ projects.count }}</span>
+                <span class="stat-label">Total Projects</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ projects|length }}</span>
+                <span class="stat-label">AI Models</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ categories.count }}</span>
+                <span class="stat-label">Categories</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Filters -->
+<section class="project-filters-section">
+    <div class="container">
+        <div class="filters-container">
+            <div class="filter-group">
+                <h4>Filter by Category:</h4>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-th"></i>
+                        <span>All Projects</span>
+                    </button>
+                    {% for category in categories %}
+                    <button class="filter-btn" data-filter="{{ category.slug }}">
+                        {% if category.icon %}
+                            <i class="{{ category.icon }}"></i>
+                        {% else %}
+                            <i class="fas fa-folder"></i>
+                        {% endif %}
+                        <span>{{ category.name }}</span>
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <div class="ai-only-toggle">
+                    <input type="checkbox" id="aiOnlyFilter" {% if ai_only %}checked{% endif %}>
+                    <label for="aiOnlyFilter">
+                        <i class="fas fa-brain"></i>
+                        AI Projects Only
+                    </label>
+                </div>
+                
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Grid -->
+<section class="projects-showcase section">
+    <div class="container">
+        <div class="projects-grid" id="projectsGrid">
+            {% for project in projects %}
+            <div class="project-card ai-enhanced-card" 
+                 data-category="{{ project.category.slug }}" 
+                 data-ai="{{ project.is_ai_project|yesno:'true,false' }}"
+                 data-complexity="{{ project.complexity_level }}">
+                
+                <!-- Project Header -->
+                <div class="project-header">
+                    <div class="project-badges">
+                        {% if project.is_ai_project %}
+                        <span class="ai-badge">
+                            <i class="fas fa-brain"></i>
+                            AI Project
+                        </span>
+                        {% endif %}
+                        
+                        {% if project.featured %}
+                        <span class="featured-badge">
+                            <i class="fas fa-star"></i>
+                            Featured
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="complexity-indicator complexity-{{ project.complexity_level }}">
+                        <div class="complexity-dots">
+                            <div class="dot {% if project.complexity_level != 'beginner' %}filled{% endif %}"></div>
+                            <div class="dot {% if project.complexity_level == 'advanced' or project.complexity_level == 'expert' %}filled{% endif %}"></div>
+                            <div class="dot {% if project.complexity_level == 'expert' %}filled{% endif %}"></div>
+                        </div>
+                        <span>{{ project.get_complexity_level_display }}</span>
+                    </div>
+                </div>
+                
+                <!-- Project Image -->
+                <div class="project-image">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}" loading="lazy">
+                    {% else %}
+                        <div class="ai-project-placeholder">
+                            <div class="neural-network-visual">
+                                <div class="nodes">
+                                    <div class="node"></div>
+                                    <div class="node"></div>
+                                    <div class="node"></div>
+                                    <div class="node"></div>
+                                </div>
+                                <div class="connections">
+                                    <div class="connection"></div>
+                                    <div class="connection"></div>
+                                    <div class="connection"></div>
+                                </div>
+                            </div>
+                            <i class="fas fa-robot project-placeholder-icon"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Project Overlay -->
+                    <div class="project-overlay">
+                        <div class="project-links">
+                            {% if project.github_url %}
+                            <a href="{{ project.github_url }}" class="project-link" target="_blank" title="Source Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            {% endif %}
+                            
+                            {% if project.live_url %}
+                            <a href="{{ project.live_url }}" class="project-link" target="_blank" title="Live Demo">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            {% endif %}
+                            
+                            {% if project.demo_url %}
+                            <a href="{{ project.demo_url }}" class="project-link" target="_blank" title="Interactive Demo">
+                                <i class="fas fa-play"></i>
+                            </a>
+                            {% endif %}
+                            
+                            <a href="{{ project.get_absolute_url }}" class="project-link" title="View Details">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Content -->
+                <div class="project-content">
+                    <div class="project-category" style="color: {{ project.category.color }};">
+                        {% if project.category.icon %}
+                            <i class="{{ project.category.icon }}"></i>
+                        {% endif %}
+                        {{ project.category.name }}
+                    </div>
+                    
+                    <h3 class="project-title">
+                        <a href="{{ project.get_absolute_url }}">{{ project.title }}</a>
+                    </h3>
+                    
+                    <p class="project-description">{{ project.short_description }}</p>
+                    
+                    <!-- Technology Stack -->
+                    <div class="project-technologies">
+                        {% for tech in project.technologies.all|slice:":4" %}
+                            <span class="tech-tag" style="border-color: {{ tech.color }}; color: {{ tech.color }};">
+                                {% if tech.icon %}<i class="{{ tech.icon }}"></i>{% endif %}
+                                {{ tech.name }}
+                            </span>
+                        {% endfor %}
+                        
+                        {% if project.technologies.count > 4 %}
+                            <span class="tech-more">+{{ project.technologies.count|add:"-4" }} more</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Project Footer -->
+                    <div class="project-footer">
+                        <div class="project-meta">
+                            <span class="project-date">
+                                <i class="fas fa-calendar"></i>
+                                {{ project.created_date|date:"M Y" }}
+                            </span>
+                        </div>
+                        
+                        <a href="{{ project.get_absolute_url }}" class="project-btn">
+                            <span>Explore</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- AI Enhancement Effects -->
+                <div class="card-glow-effect"></div>
+                <div class="neural-border"></div>
+            </div>
+            {% empty %}
+            
+            <!-- Empty State -->
+            <div class="empty-projects-state">
+                <div class="empty-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>No Projects Found</h3>
+                <p>Projects will appear here once they're added to the portfolio. Check back soon for exciting AI innovations!</p>
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    <i class="fas fa-home"></i>
+                    Back to Home
+                </a>
+            </div>
+            
+            {% endfor %}
+        </div>
+        
+        <!-- Load More Button -->
+        {% if projects.has_next %}
+        <div class="load-more-section">
+            <button class="btn btn-secondary load-more-btn">
+                <i class="fas fa-plus"></i>
+                Load More Projects
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Project filtering functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    const aiOnlyFilter = document.getElementById('aiOnlyFilter');
+    const viewButtons = document.querySelectorAll('.view-btn');
+    const projectsGrid = document.getElementById('projectsGrid');
+    
+    // Category filtering
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const filter = btn.dataset.filter;
+            
+            // Update active button
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            filterProjects();
+        });
+    });
+    
+    // AI-only filtering
+    if (aiOnlyFilter) {
+        aiOnlyFilter.addEventListener('change', filterProjects);
+    }
+    
+    // View toggle
+    viewButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.dataset.view;
+            
+            viewButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            projectsGrid.className = `projects-grid projects-${view}`;
+        });
+    });
+    
+    function filterProjects() {
+        const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+        const aiOnly = aiOnlyFilter ? aiOnlyFilter.checked : false;
+        
+        projectCards.forEach(card => {
+            const category = card.dataset.category;
+            const isAI = card.dataset.ai === 'true';
+            
+            const categoryMatch = activeFilter === 'all' || category === activeFilter;
+            const aiMatch = !aiOnly || isAI;
+            
+            if (categoryMatch && aiMatch) {
+                card.style.display = 'block';
+                card.classList.add('filter-show');
+            } else {
+                card.style.display = 'none';
+                card.classList.remove('filter-show');
+            }
+        });
+        
+        // Update counts
+        updateProjectCounts();
+    }
+    
+    function updateProjectCounts() {
+        const visibleProjects = document.querySelectorAll('.project-card.filter-show').length;
+        const totalProjects = projectCards.length;
+        
+        // You can add count display logic here if needed
+    }
+    
+    // Animate project cards on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '-50px'
+    };
+    
+    const projectObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, observerOptions);
+    
+    projectCards.forEach(card => {
+        projectObserver.observe(card);
+    });
+    
+    // 3D tilt effect for project cards
+    projectCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+    });
+});
+</script>
+{% endblock %}

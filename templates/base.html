@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Prevent auto-translation -->
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="language" content="en">
+    
+    <title>{% block title %}AI Developer Portfolio - Building Tomorrow's Intelligence{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block description %}Muhammad Ahmed Naeem - AI Developer & Machine Learning Engineer. Building intelligent solutions with cutting-edge artificial intelligence and deep learning technologies.{% endblock %}">
+    <meta name="keywords" content="AI Developer, Machine Learning Engineer, Artificial Intelligence, Deep Learning, Neural Networks, Python, Django, TensorFlow, PyTorch">
+    <meta name="author" content="Muhammad Ahmed Naeem">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}Muhammad Ahmed Naeem - AI Developer Portfolio{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Building intelligent solutions with cutting-edge AI and ML technologies{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Muhammad Ahmed Naeem - AI Developer{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}AI Developer & ML Engineer building tomorrow's intelligence{% endblock %}">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %} loading">
+    <!-- AI-Inspired Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="ai-loader">
+            <div class="neural-network">
+                <div class="node node-1"></div>
+                <div class="node node-2"></div>
+                <div class="node node-3"></div>
+                <div class="connection connection-1"></div>
+                <div class="connection connection-2"></div>
+                <div class="connection connection-3"></div>
+            </div>
+            <div class="loading-text">
+                <span class="typing-effect notranslate" translate="no" data-translate="no" lang="en">Initializing AI Portfolio...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    {% include 'includes/navbar.html' %}
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
+    <div id="ai-chatbot-widget" class="chatbot-hidden chatbot-closed">
+        <div id="chatbot-header">
+            <div class="chatbot-header-title">
+                <i class="fas fa-robot"></i>
+                <span>Ask Portfolio AI</span>
+            </div>
+            <button id="chatbot-close" aria-label="Close"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chatbot-main">
+            <div id="chatbot-messages"></div>
+            <form id="chatbot-form">
+                <input type="text" id="chatbot-input" autocomplete="off" placeholder="Type anything about my skills, CV, projects..." />
+                <button type="submit" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
+        <div id="chatbot-hints">
+            <span class="hint" data-text="View your resume">Resume</span>
+            <span class="hint" data-text="Tell me about your projects">Projects</span>
+            <span class="hint" data-text="Summarize your experience">Bio</span>
+            <span class="hint" data-text="How can I contact you?">Contact</span>
+        </div>
+    </div>
+    <button id="chatbot-fab">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/animations.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

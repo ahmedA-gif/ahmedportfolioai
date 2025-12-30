@@ -1,0 +1,1384 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} - AI Project Details{% endblock %}
+
+{% block description %}{{ project.short_description }}{% endblock %}
+
+{% block body_class %}project-detail-page{% endblock %}
+
+{% block content %}
+<!-- Project Detail Hero Section -->
+<section class="project-detail-hero section">
+    <div class="container">
+        <div class="project-breadcrumb scroll-reveal">
+            <nav class="breadcrumb-nav">
+                <a href="{% url 'home' %}" class="breadcrumb-link">
+                    <i class="fas fa-home"></i>
+                    <span translate="no">Home</span>
+                </a>
+                <i class="fas fa-chevron-right breadcrumb-separator"></i>
+                <a href="{% url 'project_list' %}" class="breadcrumb-link">
+                    <i class="fas fa-robot"></i>
+                    <span translate="no">AI Projects</span>
+                </a>
+                <i class="fas fa-chevron-right breadcrumb-separator"></i>
+                <span class="breadcrumb-current">{{ project.title }}</span>
+            </nav>
+        </div>
+        
+        <div class="project-hero-content">
+            <div class="project-hero-text scroll-reveal">
+                <div class="project-badges">
+                    {% if project.is_ai_project %}
+                    <span class="ai-badge">
+                        <i class="fas fa-brain"></i>
+                        <span translate="no">AI Project</span>
+                    </span>
+                    {% endif %}
+                    
+                    {% if project.featured %}
+                    <span class="featured-badge">
+                        <i class="fas fa-star"></i>
+                        <span translate="no">Featured</span>
+                    </span>
+                    {% endif %}
+                    
+                    <span class="complexity-badge complexity-{{ project.complexity_level }}">
+                        <i class="fas fa-signal"></i>
+                        <span>{{ project.get_complexity_level_display }}</span>
+                    </span>
+                </div>
+                
+                <h1 class="project-title glitch-text">{{ project.title }}</h1>
+                
+                <div class="project-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-folder" style="color: {{ project.category.color }};"></i>
+                        <span style="color: {{ project.category.color }};">{{ project.category.name }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ project.created_date|date:"F j, Y" }}</span>
+                    </div>
+                    {% if project.updated_date != project.created_date %}
+                    <div class="meta-item">
+                        <i class="fas fa-sync"></i>
+                        <span>Updated {{ project.updated_date|date:"M j, Y" }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <p class="project-intro">{{ project.short_description }}</p>
+                
+                <div class="project-actions">
+                    {% if project.github_url %}
+                    <a href="{{ project.github_url }}" class="btn btn-primary" target="_blank" rel="noopener">
+                        <i class="fab fa-github"></i>
+                        <span translate="no">View Source Code</span>
+                        <div class="btn-glow"></div>
+                    </a>
+                    {% endif %}
+                    
+                    {% if project.live_url %}
+                    <a href="{{ project.live_url }}" class="btn btn-secondary" target="_blank" rel="noopener">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span translate="no">Live Demo</span>
+                        <div class="btn-glow"></div>
+                    </a>
+                    {% endif %}
+                    
+                    {% if project.demo_url %}
+                    <a href="{{ project.demo_url }}" class="btn btn-outline" target="_blank" rel="noopener">
+                        <i class="fas fa-play"></i>
+                        <span translate="no">Interactive Demo</span>
+                        <div class="btn-glow"></div>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="project-hero-visual scroll-reveal">
+                {% if project.image %}
+                <div class="project-main-image">
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" loading="lazy">
+                    <div class="image-glow-effect"></div>
+                    <div class="image-border-animation"></div>
+                </div>
+                {% else %}
+                <div class="project-visual-placeholder">
+                    <div class="neural-visualization">
+                        <div class="neural-grid">
+                            <div class="neural-dot"></div>
+                            <div class="neural-dot"></div>
+                            <div class="neural-dot"></div>
+                            <div class="neural-dot"></div>
+                            <div class="neural-dot"></div>
+                            <div class="neural-dot"></div>
+                        </div>
+                        <div class="data-streams">
+                            <div class="stream stream-1"></div>
+                            <div class="stream stream-2"></div>
+                            <div class="stream stream-3"></div>
+                        </div>
+                    </div>
+                    <i class="fas fa-robot project-placeholder-icon"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Content Section -->
+<section class="project-content-section section">
+    <div class="container">
+        <div class="project-layout">
+            <div class="project-main-content">
+                <div class="content-section scroll-reveal">
+                    <div class="section-header-inline">
+                        <h2 class="content-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span translate="no">Project Overview</span>
+                        </h2>
+                    </div>
+                    <div class="project-description">
+                        {{ project.description|linebreaks }}
+                    </div>
+                </div>
+                
+                {% if project.technologies.all %}
+                <div class="content-section scroll-reveal">
+                    <div class="section-header-inline">
+                        <h2 class="content-title">
+                            <i class="fas fa-cogs"></i>
+                            <span translate="no">Technology Stack</span>
+                        </h2>
+                    </div>
+                    <div class="tech-stack-grid">
+                        {% for tech in project.technologies.all %}
+                        <div class="tech-item">
+                            <div class="tech-icon" style="border-color: {{ tech.color }}; background: rgba({{ tech.color|slice:'1:' }}{{ tech.color|slice:'1:' }}{{ tech.color|slice:'1:' }}, 0.1);">
+                                {% if tech.icon %}
+                                    <i class="{{ tech.icon }}" style="color: {{ tech.color }};"></i>
+                                {% else %}
+                                    <i class="fas fa-code" style="color: {{ tech.color }};"></i>
+                                {% endif %}
+                            </div>
+                            <span class="tech-name">{{ tech.name }}</span>
+                            <div class="tech-glow" style="background: {{ tech.color }};"></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if project.key_features %}
+                <div class="content-section scroll-reveal">
+                    <div class="section-header-inline">
+                        <h2 class="content-title">
+                            <i class="fas fa-star"></i>
+                            <span translate="no">Key Features</span>
+                        </h2>
+                    </div>
+                    <div class="features-list">
+                        {% for feature in project.key_features.all %}
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>{{ feature.title }}</h4>
+                                <p>{{ feature.description }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if project.challenges %}
+                <div class="content-section scroll-reveal">
+                    <div class="section-header-inline">
+                        <h2 class="content-title">
+                            <i class="fas fa-mountain"></i>
+                            <span translate="no">Challenges & Solutions</span>
+                        </h2>
+                    </div>
+                    <div class="challenges-content">
+                        {{ project.challenges|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if project.results %}
+                <div class="content-section scroll-reveal">
+                    <div class="section-header-inline">
+                        <h2 class="content-title">
+                            <i class="fas fa-chart-line"></i>
+                            <span translate="no">Results & Impact</span>
+                        </h2>
+                    </div>
+                    <div class="results-content">
+                        {{ project.results|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Enhanced Project Sidebar -->
+            <div class="project-sidebar">
+                <!-- Enhanced Project Links Section -->
+                <div class="sidebar-section scroll-reveal">
+                    <h3 class="sidebar-title">
+                        <i class="fab fa-github"></i>
+                        <span translate="no">Project Links</span>
+                    </h3>
+                    <div class="project-links enhanced-links">
+                        {% if project.github_url %}
+                        <a href="{{ project.github_url }}" class="sidebar-link enhanced-link" target="_blank" rel="noopener">
+                            <div class="link-icon-container">
+                                <div class="rotated-box github-box">
+                                    <div class="box-face front">
+                                        <i class="fab fa-github"></i>
+                                    </div>
+                                    <div class="box-face back">
+                                        <i class="fas fa-code"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="link-content">
+                                <span class="link-title" translate="no">Source Code</span>
+                                <span class="link-desc">View on GitHub</span>
+                            </div>
+                            <div class="link-arrow-container">
+                                <i class="fas fa-external-link-alt link-arrow"></i>
+                                <div class="arrow-trail"></div>
+                            </div>
+                        </a>
+                        {% endif %}
+                        
+                        {% if project.live_url %}
+                        <a href="{{ project.live_url }}" class="sidebar-link enhanced-link" target="_blank" rel="noopener">
+                            <div class="link-icon-container">
+                                <div class="rotated-box live-box">
+                                    <div class="box-face front">
+                                        <i class="fas fa-globe"></i>
+                                    </div>
+                                    <div class="box-face back">
+                                        <i class="fas fa-rocket"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="link-content">
+                                <span class="link-title" translate="no">Live Website</span>
+                                <span class="link-desc">Visit live demo</span>
+                            </div>
+                            <div class="link-arrow-container">
+                                <i class="fas fa-external-link-alt link-arrow"></i>
+                                <div class="arrow-trail"></div>
+                            </div>
+                        </a>
+                        {% endif %}
+                        
+                        {% if project.demo_url %}
+                        <a href="{{ project.demo_url }}" class="sidebar-link enhanced-link" target="_blank" rel="noopener">
+                            <div class="link-icon-container">
+                                <div class="rotated-box demo-box">
+                                    <div class="box-face front">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                    <div class="box-face back">
+                                        <i class="fas fa-gamepad"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="link-content">
+                                <span class="link-title" translate="no">Interactive Demo</span>
+                                <span class="link-desc">Try it yourself</span>
+                            </div>
+                            <div class="link-arrow-container">
+                                <i class="fas fa-external-link-alt link-arrow"></i>
+                                <div class="arrow-trail"></div>
+                            </div>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="sidebar-section scroll-reveal">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-info"></i>
+                        <span translate="no">Project Details</span>
+                    </h3>
+                    <div class="project-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Category:</span>
+                            <span class="spec-value" style="color: {{ project.category.color }};">
+                                {{ project.category.name }}
+                            </span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Complexity:</span>
+                            <span class="spec-value">{{ project.get_complexity_level_display }}</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Created:</span>
+                            <span class="spec-value">{{ project.created_date|date:"F j, Y" }}</span>
+                        </div>
+                        {% if project.updated_date != project.created_date %}
+                        <div class="spec-item">
+                            <span class="spec-label">Last Updated:</span>
+                            <span class="spec-value">{{ project.updated_date|date:"F j, Y" }}</span>
+                        </div>
+                        {% endif %}
+                        {% if project.is_ai_project %}
+                        <div class="spec-item">
+                            <span class="spec-label">Type:</span>
+                            <span class="spec-value ai-highlight">
+                                <i class="fas fa-brain"></i>
+                                AI Project
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if project.technologies.all %}
+                <div class="sidebar-section scroll-reveal">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-tools"></i>
+                        <span translate="no">Technologies</span>
+                    </h3>
+                    <div class="sidebar-tech-tags">
+                        {% for tech in project.technologies.all %}
+                        <span class="sidebar-tech-tag" style="border-color: {{ tech.color }}; color: {{ tech.color }};">
+                            {% if tech.icon %}
+                                <i class="{{ tech.icon }}"></i>
+                            {% endif %}
+                            {{ tech.name }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Projects -->
+{% if related_projects %}
+<section class="related-projects section">
+    <div class="container">
+        <div class="section-header scroll-reveal">
+            <div class="section-badge">
+                <i class="fas fa-robot"></i>
+                <span translate="no">More Projects</span>
+            </div>
+            <h2 class="section-title">
+                <span class="gradient-text">Related</span>
+                <span class="ai-text">Projects</span>
+            </h2>
+            <p class="section-subtitle">
+                Explore more projects from the {{ project.category.name }} category
+            </p>
+        </div>
+        
+        <div class="related-projects-grid">
+            {% for related in related_projects %}
+            <div class="project-card scroll-reveal">
+                <div class="project-image">
+                    {% if related.image %}
+                        <img src="{{ related.image.url }}" alt="{{ related.title }}" loading="lazy">
+                    {% else %}
+                        <div class="project-placeholder">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                    {% endif %}
+                    <div class="project-overlay">
+                        <div class="project-links">
+                            {% if related.github_url %}
+                                <a href="{{ related.github_url }}" target="_blank" title="GitHub">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            {% endif %}
+                            {% if related.live_url %}
+                                <a href="{{ related.live_url }}" target="_blank" title="Live Demo">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-category" style="color: {{ related.category.color }};">
+                        {{ related.category.name }}
+                    </div>
+                    <h4>{{ related.title }}</h4>
+                    <p>{{ related.short_description|truncatewords:20 }}</p>
+                    <a href="{{ related.get_absolute_url }}" class="project-link">
+                        <span translate="no">View Project</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Back to Projects -->
+<section class="back-to-projects-section">
+    <div class="container">
+        <div class="back-to-projects-content scroll-reveal">
+            <a href="{% url 'project_list' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span translate="no">Back to All Projects</span>
+                <div class="btn-glow"></div>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Project Detail Specific Styles */
+.project-detail-hero {
+    padding: 8rem 0 4rem;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
+        var(--bg-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.project-breadcrumb {
+    margin-bottom: 2rem;
+}
+
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-link {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+    color: var(--ai-primary);
+}
+
+.breadcrumb-separator {
+    color: #666;
+    font-size: 0.7rem;
+}
+
+.breadcrumb-current {
+    color: var(--ai-primary);
+    font-weight: 600;
+}
+
+.project-hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.project-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.ai-badge,
+.featured-badge,
+.complexity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    animation: badge-glow 3s ease-in-out infinite;
+}
+
+.ai-badge {
+    background: rgba(0, 255, 255, 0.1);
+    border: 2px solid var(--ai-primary);
+    color: var(--ai-primary);
+}
+
+.featured-badge {
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid #ffd700;
+    color: #ffd700;
+}
+
+.complexity-badge {
+    background: rgba(138, 43, 226, 0.1);
+    border: 2px solid var(--cyber-purple);
+    color: var(--cyber-purple);
+}
+
+.project-title {
+    font-family: var(--font-ai);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, var(--ai-primary), var(--quantum-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #cccccc;
+    font-size: 0.95rem;
+}
+
+.project-intro {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+}
+
+.project-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.project-main-image {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.project-main-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.image-glow-effect {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+    animation: image-glow 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.image-border-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    background: linear-gradient(45deg, var(--ai-primary), var(--neural-blue), var(--quantum-green), var(--ai-primary));
+    background-size: 200% 200%;
+    animation: border-flow 3s linear infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: exclude;
+    mask-composite: exclude;
+}
+
+.project-visual-placeholder {
+    width: 100%;
+    height: 400px;
+    background: linear-gradient(135deg, var(--ai-primary), var(--neural-blue));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-content-section {
+    padding: 6rem 0;
+}
+
+.project-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+}
+
+.content-section {
+    margin-bottom: 4rem;
+    padding: 2rem;
+    background: var(--bg-glass);
+    border: 2px solid rgba(0, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+}
+
+.content-section:hover {
+    border-color: rgba(0, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.1);
+}
+
+.section-header-inline {
+    margin-bottom: 2rem;
+}
+
+.content-title {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: var(--font-ai);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--ai-primary);
+    margin-bottom: 1rem;
+}
+
+.project-description,
+.challenges-content,
+.results-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #e0e0e0;
+}
+
+.tech-stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1.5rem;
+}
+
+.tech-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--bg-glass);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.tech-item:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: var(--ai-primary);
+    box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
+}
+
+.tech-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tech-name {
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+}
+
+.project-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sidebar-section {
+    background: var(--bg-glass);
+    border: 2px solid rgba(0, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+}
+
+.sidebar-section:hover {
+    border-color: rgba(0, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.1);
+}
+
+.sidebar-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-ai);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ai-primary);
+    margin-bottom: 1.5rem;
+}
+
+/* Enhanced Project Links with Rotated Boxes */
+.enhanced-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.enhanced-link {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+    border: 2px solid rgba(0, 255, 255, 0.2);
+    border-radius: 20px;
+    text-decoration: none;
+    color: #ffffff;
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+}
+
+.enhanced-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(0, 255, 255, 0.1), 
+        transparent
+    );
+    transition: left 0.8s ease;
+    z-index: 1;
+}
+
+.enhanced-link:hover::before {
+    left: 100%;
+}
+
+.enhanced-link:hover {
+    background: linear-gradient(135deg, 
+        rgba(0, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(0, 255, 255, 0.1) 100%
+    );
+    border-color: var(--ai-primary);
+    transform: translateX(10px) translateY(-5px) scale(1.02);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(0, 255, 255, 0.3),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+/* Enhanced Rotated Box Design */
+.link-icon-container {
+    perspective: 1000px;
+}
+
+.rotated-box {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    animation: box-float 4s ease-in-out infinite;
+}
+
+.box-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    transition: all 0.4s ease;
+    border: 2px solid;
+}
+
+.box-face.front {
+    transform: translateZ(30px);
+}
+
+.box-face.back {
+    transform: rotateY(180deg) translateZ(30px);
+}
+
+/* GitHub Box */
+.github-box .box-face {
+    background: linear-gradient(135deg, #24292e, #586069);
+    border-color: #f0f6fc;
+    color: #f0f6fc;
+    box-shadow: 
+        0 10px 25px rgba(36, 41, 46, 0.3),
+        inset 0 0 20px rgba(240, 246, 252, 0.1);
+}
+
+.github-box:hover .box-face {
+    box-shadow: 
+        0 15px 35px rgba(36, 41, 46, 0.5),
+        0 0 30px rgba(240, 246, 252, 0.3),
+        inset 0 0 30px rgba(240, 246, 252, 0.2);
+}
+
+/* Live Box */
+.live-box .box-face {
+    background: linear-gradient(135deg, #0066cc, #0080ff);
+    border-color: #66ccff;
+    color: #ffffff;
+    box-shadow: 
+        0 10px 25px rgba(0, 102, 204, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.live-box:hover .box-face {
+    box-shadow: 
+        0 15px 35px rgba(0, 102, 204, 0.5),
+        0 0 30px rgba(102, 204, 255, 0.4),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Demo Box */
+.demo-box .box-face {
+    background: linear-gradient(135deg, #ff6b35, #ff8c42);
+    border-color: #ffb366;
+    color: #ffffff;
+    box-shadow: 
+        0 10px 25px rgba(255, 107, 53, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.demo-box:hover .box-face {
+    box-shadow: 
+        0 15px 35px rgba(255, 107, 53, 0.5),
+        0 0 30px rgba(255, 179, 102, 0.4),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Box Hover Effects */
+.enhanced-link:hover .rotated-box {
+    transform: rotateY(180deg) rotateX(15deg) scale(1.1);
+    animation-play-state: paused;
+}
+
+@keyframes box-float {
+    0%, 100% {
+        transform: translateY(0px) rotateX(0deg);
+    }
+    25% {
+        transform: translateY(-8px) rotateX(5deg);
+    }
+    50% {
+        transform: translateY(0px) rotateX(0deg);
+    }
+    75% {
+        transform: translateY(-5px) rotateX(-3deg);
+    }
+}
+
+/* Link Content */
+.link-content {
+    flex: 1;
+    z-index: 2;
+    position: relative;
+}
+
+.link-title {
+    display: block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-ai);
+    background: linear-gradient(45deg, #ffffff, var(--ai-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.4s ease;
+}
+
+.enhanced-link:hover .link-title {
+    background: linear-gradient(45deg, var(--ai-primary), var(--quantum-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.link-desc {
+    font-size: 0.95rem;
+    color: #aaaaaa;
+    transition: color 0.3s ease;
+}
+
+.enhanced-link:hover .link-desc {
+    color: #cccccc;
+}
+
+/* Enhanced Arrow */
+.link-arrow-container {
+    position: relative;
+    z-index: 2;
+}
+
+.link-arrow {
+    font-size: 1.2rem;
+    color: var(--ai-primary);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+}
+
+.arrow-trail {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, var(--ai-primary), transparent);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: all 0.4s ease;
+    opacity: 0;
+}
+
+.enhanced-link:hover .link-arrow {
+    transform: translateX(10px) rotate(15deg) scale(1.2);
+    color: var(--quantum-green);
+    text-shadow: 0 0 15px var(--quantum-green);
+}
+
+.enhanced-link:hover .arrow-trail {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0.6;
+    animation: arrow-trail-pulse 0.6s ease-out;
+}
+
+@keyframes arrow-trail-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0.4;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+.project-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.spec-item:last-child {
+    border-bottom: none;
+}
+
+.spec-label {
+    font-weight: 500;
+    color: #aaaaaa;
+}
+
+.spec-value {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.ai-highlight {
+    color: var(--ai-primary) !important;
+}
+
+.sidebar-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.sidebar-tech-tag {
+    padding: 0.5rem 1rem;
+    border: 1px solid;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.sidebar-tech-tag:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+}
+
+.related-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.back-to-projects-section {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2rem;
+    background: transparent;
+    border: 2px solid var(--ai-primary);
+    border-radius: 12px;
+    color: var(--ai-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.back-btn:hover {
+    background: var(--ai-primary);
+    color: var(--bg-primary);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 255, 255, 0.4);
+}
+
+/* Animations */
+@keyframes badge-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
+}
+
+@keyframes image-glow {
+    0%, 100% { opacity: 0.3; transform: rotate(0deg); }
+    50% { opacity: 0.6; transform: rotate(180deg); }
+}
+
+@keyframes border-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .project-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .project-sidebar {
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-hero-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .project-actions {
+        justify-content: center;
+    }
+    
+    .tech-stack-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 1rem;
+    }
+    
+    .breadcrumb-nav {
+        flex-wrap: wrap;
+    }
+    
+    .enhanced-link {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .rotated-box {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .box-face {
+        font-size: 1.4rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Enhanced scroll animations for project detail
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '-50px'
+    };
+
+    const detailObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('revealed', 'animate-in');
+                }, index * 150);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all scroll reveal elements
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+        detailObserver.observe(el);
+    });
+
+    // Enhanced tech item hover effects
+    document.querySelectorAll('.tech-item').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            const glow = document.createElement('div');
+            glow.className = 'tech-glow';
+            glow.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 100px;
+                height: 100px;
+                background: radial-gradient(circle, rgba(0, 255, 255, 0.2) 0%, transparent 70%);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                animation: glow-pulse 1s ease-out;
+                pointer-events: none;
+                z-index: -1;
+            `;
+            item.appendChild(glow);
+            
+            setTimeout(() => {
+                if (glow.parentNode) {
+                    glow.remove();
+                }
+            }, 1000);
+        });
+    });
+
+    // Enhanced project link interactions
+    document.querySelectorAll('.enhanced-link').forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            // Create particle effect
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createLinkParticle(link);
+                }, i * 100);
+            }
+        });
+        
+        link.addEventListener('click', (e) => {
+            // Create click burst effect
+            createClickBurst(link, e);
+        });
+    });
+
+    function createLinkParticle(link) {
+        const rect = link.getBoundingClientRect();
+        const particle = document.createElement('div');
+        particle.innerHTML = '✨';
+        particle.style.cssText = `
+            position: fixed;
+            left: ${rect.left + Math.random() * rect.width}px;
+            top: ${rect.top + Math.random() * rect.height}px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: link-particle-float 1.5s ease-out forwards;
+            color: var(--ai-primary);
+        `;
+        
+        document.body.appendChild(particle);
+        
+        setTimeout(() => {
+            if (particle.parentNode) {
+                particle.remove();
+            }
+        }, 1500);
+    }
+
+    function createClickBurst(link, e) {
+        const rect = link.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 8; i++) {
+            const particle = document.createElement('div');
+            particle.innerHTML = ['⚡', '✦', '✧', '⭐'][Math.floor(Math.random() * 4)];
+            particle.style.cssText = `
+                position: fixed;
+                left: ${centerX}px;
+                top: ${centerY}px;
+                font-size: 14px;
+                pointer-events: none;
+                z-index: 1001;
+                animation: click-burst 0.8s ease-out forwards;
+                animation-delay: ${i * 0.05}s;
+                color: var(--quantum-green);
+            `;
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.remove();
+                }
+            }, 800);
+        }
+    }
+
+    // Add required animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes glow-pulse {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
+        
+        @keyframes link-particle-float {
+            0% { opacity: 1; transform: translateY(0) scale(0); }
+            50% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-40px) scale(0.8); }
+        }
+        
+        @keyframes click-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(${Math.random() * 60 - 30}px, ${Math.random() * 60 - 30}px) scale(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(${Math.random() * 120 - 60}px, ${Math.random() * 120 - 60}px) scale(0.5);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Smooth scrolling for breadcrumb links
+    document.querySelectorAll('.breadcrumb-link[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Enhanced copy project URL functionality
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-url-btn';
+    copyBtn.innerHTML = '<i class="fas fa-share"></i> Share Project';
+    copyBtn.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        background: linear-gradient(135deg, var(--ai-primary), var(--neural-blue));
+        color: var(--bg-primary);
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        z-index: 1000;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        box-shadow: 0 8px 25px rgba(0, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+    `;
+    
+    copyBtn.addEventListener('mouseenter', () => {
+        copyBtn.style.transform = 'translateY(-5px) scale(1.05)';
+        copyBtn.style.boxShadow = '0 15px 35px rgba(0, 255, 255, 0.5)';
+    });
+    
+    copyBtn.addEventListener('mouseleave', () => {
+        copyBtn.style.transform = 'translateY(0) scale(1)';
+        copyBtn.style.boxShadow = '0 8px 25px rgba(0, 255, 255, 0.3)';
+    });
+    
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            copyBtn.style.background = 'linear-gradient(135deg, var(--quantum-green), var(--ai-primary))';
+            
+            // Create success particles
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    createLinkParticle(copyBtn);
+                }, i * 100);
+            }
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i class="fas fa-share"></i> Share Project';
+                copyBtn.style.background = 'linear-gradient(135deg, var(--ai-primary), var(--neural-blue))';
+            }, 2000);
+        });
+    });
+    
+    document.body.appendChild(copyBtn);
+});
+</script>
+{% endblock %}
